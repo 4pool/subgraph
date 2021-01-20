@@ -1,0 +1,33 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: FourPool
+    network: mainnet
+    source:
+      address: "0xd9fD019fdA8738e468Fb278A03e58AB2462f49c1"
+      abi: FourPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Pool
+        - Referral
+        - Trade
+        - Tcount
+        - User
+      abis:
+        - name: FourPool
+          file: ./abis/FourPool.json
+      eventHandlers:
+        - event: OnPool(uint32,uint32,uint32,uint32,uint32,uint32,uint8)
+          handler: handlePool
+        - event: OnReferral(indexed address,uint32)
+          handler: handleReferral
+        - event: OnTrade(uint32,uint32,uint32,uint32,uint256)
+          handler: handleTrade
+        - event: OnUser(indexed address,uint32,uint32,uint32,uint32,uint8,address)
+          handler: handleUser
+      file: ./src/mapping.ts
